@@ -95,5 +95,4 @@ def main():
 
     trimNames(players)
 
-
 main()
