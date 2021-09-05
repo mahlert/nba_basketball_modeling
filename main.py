@@ -1,9 +1,20 @@
 import csv
+import glob
+import os
 
 class Player:
 
     name = ""
     position = ""
+    seasonData = []
+
+    def __init__(self, name, position, seasonData):
+        self.name = name
+        self.position = position
+        self.seasonData = seasonData
+
+class Season:
+
     fgPerc = 0.0
     threesMade = 0
     adjustedFG = 0.0
@@ -15,9 +26,7 @@ class Player:
     turnovers = 0
     ptsPerGame = 0
 
-    def __init__(self, name, position, fgPerc, threesMade, adjustedFG, freeThrowPerc, rebounds, assists, steals, blocks, turnovers, ptsPerGame):
-        self.name = name
-        self.position = position
+    def __init__(self, fgPerc, threesMade, adjustedFG, freeThrowPerc, rebounds, assists, steals, blocks, turnovers, ptsPerGame):
         self.fgPerc = fgPerc
         self.threesMade = threesMade
         self.adjustedFG = adjustedFG
@@ -29,30 +38,62 @@ class Player:
         self.turnovers = turnovers
         self.ptsPerGame = ptsPerGame
 
-def main():
+def printPlayers(players):
+    for player in players:
+        print(player.name)
 
-    # Array of players
+def checkPlayer(players, playerName):
+    for player in players:
+        if(player == playerName):
+            return 1
+
+    return -1
+
+def createPlayers():
+
     players = []
 
-    with open('2017_2018.csv', 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
+    files = glob.glob("*.csv")
+    for file in files:
 
-        # Start at line 3
-        next(csv_reader)
-        next(csv_reader)
+        with open(file, 'r') as csv_file:
+            csv_reader = csv.reader(csv_file)
 
-        for line in csv_reader:
+            next(csv_reader)
+            next(csv_reader)
 
-            # Cut characters after backslash
-            name = line[0]
-            terminator = name.index('\\')
+            for line in csv_reader:
 
-            # Create new player in arrays
-            x = Player(name[:terminator],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10],line[11])
-            players.append(x)
+                szn = Season(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9])
 
-    for i in players:
-        print(i.name)
+                x = checkPlayer(players, line[0])
+
+                if (x == -1):
+                    # New player
+                    newPlayer = Player(line[0], line[1], [])
+                    newPlayer.seasonData.append(szn)
+                    players.append(newPlayer)
+
+                else:
+                    # player exists
+                    prevSeason = players[x].seasonData
+                    prevSeason.append(szn)
+                    players[x].seasonData = prevSeason
+
+        return players
+
+def trimNames(players):
+    for i in range(len(players)):
+        name = players[i].name
+        terminator = name.index("\\")
+        trimmedName = name[:terminator]
+        players[i].name = trimmedName
+
+def main():
+
+    players = createPlayers()
+
+    trimNames(players)
 
 
 main()
