@@ -4,29 +4,30 @@ import os
 
 class Player:
 
-    name = ""
-    position = ""
-    seasonData = []
-
     def __init__(self, name, position, seasonData):
         self.name = name
         self.position = position
-        self.seasonData = seasonData
+        self.seasonData = [seasonData]
+
+    def addSeason(self, season):
+        self.seasonData.append(season)
+
+    def getName(self):
+        return self.name
+
+    def getPosition(self):
+        return self.position
+
+    def getSeasonData(self):
+        return self.seasonData
+
+    def setName(self, name):
+        self.name = name
 
 class Season:
 
-    fgPerc = 0.0
-    threesMade = 0
-    adjustedFG = 0.0
-    freeThrowPerc = 0.0
-    rebounds = 0
-    assists = 0
-    steals = 0
-    blocks = 0
-    turnovers = 0
-    ptsPerGame = 0
-
-    def __init__(self, fgPerc, threesMade, adjustedFG, freeThrowPerc, rebounds, assists, steals, blocks, turnovers, ptsPerGame):
+    def __init__(self, year, fgPerc, threesMade, adjustedFG, freeThrowPerc, rebounds, assists, steals, blocks, turnovers, ptsPerGame):
+        self.year = year
         self.fgPerc = fgPerc
         self.threesMade = threesMade
         self.adjustedFG = adjustedFG
@@ -38,61 +39,128 @@ class Season:
         self.turnovers = turnovers
         self.ptsPerGame = ptsPerGame
 
+    def getYear(self):
+        return self.year
+
+    def getFGPerc(self):
+        return self.fgPerc
+
+    def getThreesMade(self):
+        return self.threesMade
+
+    def getAdjustedFG(self):
+        return self.adjustedFG
+
+    def getFreeThrowPerc(self):
+        return self.freeThrowPerc
+
+    def getRebounds(self):
+        return self.rebounds
+
+    def getAssists(self):
+        return self.assists
+
+    def getSteals(self):
+        return self.steals
+
+    def getBlocks(self):
+        return self.blocks
+
+    def getTurnovers(self):
+        return self.turnovers
+
+    def getPtsPerGame(self):
+        return self.ptsPerGame
+
 def printPlayers(players):
     for player in players:
-        print(player.name)
+        print(player.getName())
 
-def checkPlayer(players, playerName):
-    for player in players:
-        if(player == playerName):
-            return 1
+def searchPlayer(L, target):
+    start = 0
+    end = len(L) - 1
+    while start <= end:
+        middle = (start + end) // 2
+        midpoint = L[middle].getName()
+        if midpoint > target:
+            end = middle - 1
+        elif midpoint < target:
+            start = middle + 1
+        else:
+            return middle
 
     return -1
+
+def trimYear(file):
+    terminator = file.index(".")
+    trimmedYear = file[:terminator]
+    return trimmedYear
+
+def trimName(name):
+    terminator = name.index("\\")
+    trimmedName = name[:terminator]
+    return trimmedName
+
+def insertNewPlayer(players, newPlayer):
+    index = -1
+    for i in range(len(players)):
+        if players[i].getName() > newPlayer.getName():
+            index = i
+            break
+
+    players = players[:index] + [newPlayer] + players[index:]
+    return players
 
 def createPlayers():
 
     players = []
 
     files = glob.glob("*.csv")
+
     for file in files:
 
+        # Open the file to reader
         with open(file, 'r') as csv_file:
+
+            # Create a line reader
             csv_reader = csv.reader(csv_file)
 
+            # Move to third line of file (Skipping example and blank line)
             next(csv_reader)
             next(csv_reader)
 
+            # Store string of csv file name to store as season name in a player
+            year = trimYear(file)
+
+            # for each line of player data in a CSV file
             for line in csv_reader:
 
-                szn = Season(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9])
+                # Store current values of line with year file and the data values
+                szn = Season(year, line[2], line[3], line[4], line[5], line[6], line[7], line[8], line[9],line[10], line[11])
 
-                x = checkPlayer(players, line[0])
+                # Store the value of the trimmed player name for reading ease
+                trimmedName = trimName(line[0])
 
-                if (x == -1):
-                    # New player
-                    newPlayer = Player(line[0], line[1], [])
-                    newPlayer.seasonData.append(szn)
-                    players.append(newPlayer)
+                # Store temporary new player with trimmed name, position and stored season date
+                newPlayer = Player(trimmedName, line[1], szn)
+
+                index = searchPlayer(players, newPlayer.getName())
+
+                if(index == -1):
+                    # Add new player to sorted list
+                    players = insertNewPlayer(players, newPlayer)
 
                 else:
-                    # player exists
-                    prevSeason = players[x].seasonData
-                    prevSeason.append(szn)
-                    players[x].seasonData = prevSeason
 
-        return players
+                    players[index].addSeason(szn)
 
-def trimNames(players):
-    for i in range(len(players)):
-        name = players[i].name
-        terminator = name.index("\\")
-        trimmedName = name[:terminator]
-        players[i].name = trimmedName
+
+    return players
 
 def main():
 
     players = createPlayers()
 
-    trimNames(players)
+    printPlayers(players)
 
 main()
