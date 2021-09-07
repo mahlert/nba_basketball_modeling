@@ -1,76 +1,8 @@
 import csv
 import glob
 import os
-
-class Player:
-
-    def __init__(self, name, position, seasonData):
-        self.name = name
-        self.position = position
-        self.seasonData = [seasonData]
-
-    def addSeason(self, season):
-        self.seasonData.append(season)
-
-    def getName(self):
-        return self.name
-
-    def getPosition(self):
-        return self.position
-
-    def getSeasonData(self):
-        return self.seasonData
-
-    def setName(self, name):
-        self.name = name
-
-class Season:
-
-    def __init__(self, year, fgPerc, threesMade, adjustedFG, freeThrowPerc, rebounds, assists, steals, blocks, turnovers, ptsPerGame):
-        self.year = year
-        self.fgPerc = fgPerc
-        self.threesMade = threesMade
-        self.adjustedFG = adjustedFG
-        self.freeThrowPerc  = freeThrowPerc
-        self.rebounds  = rebounds
-        self.assists = assists
-        self.steals = steals
-        self.blocks = blocks
-        self.turnovers = turnovers
-        self.ptsPerGame = ptsPerGame
-
-    def getYear(self):
-        return self.year
-
-    def getFGPerc(self):
-        return self.fgPerc
-
-    def getThreesMade(self):
-        return self.threesMade
-
-    def getAdjustedFG(self):
-        return self.adjustedFG
-
-    def getFreeThrowPerc(self):
-        return self.freeThrowPerc
-
-    def getRebounds(self):
-        return self.rebounds
-
-    def getAssists(self):
-        return self.assists
-
-    def getSteals(self):
-        return self.steals
-
-    def getBlocks(self):
-        return self.blocks
-
-    def getTurnovers(self):
-        return self.turnovers
-
-    def getPtsPerGame(self):
-        return self.ptsPerGame
+from player import Player
+from season import Season
 
 def printPlayers(players):
     for player in players:
@@ -159,8 +91,15 @@ def createPlayers():
 
 def main():
 
-    players = createPlayers()
+    # players = createPlayers()
 
-    printPlayers(players)
+    # printPlayers(players)
+
+    directory_path = os.getcwd()
+    print("My current directory is : " + directory_path)
+    folder_name = os.path.basename(directory_path)
+    print("My directory name is : " + folder_name)
+    csvPath = directory_path + "/csv_files"
+    print(csvPath)
 
 main()
