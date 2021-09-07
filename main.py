@@ -4,6 +4,16 @@ import os
 from player import Player
 from season import Season
 
+def getFiles():
+    directory_path = os.getcwd()
+    csvPath = directory_path + "/csv_files"
+    csv_files = []
+    for file in os.listdir(csvPath):
+        f = os.path.join(csvPath, file)
+        if os.path.isfile(f):
+            csv_files.append(f)
+    return csv_files
+
 def printPlayers(players):
     for player in players:
         print(player.getName())
@@ -47,7 +57,7 @@ def createPlayers():
 
     players = []
 
-    files = glob.glob("*.csv")
+    files = getFiles()
 
     for file in files:
 
@@ -91,15 +101,9 @@ def createPlayers():
 
 def main():
 
-    # players = createPlayers()
+    players = createPlayers()
 
-    # printPlayers(players)
+    printPlayers(players)
 
-    directory_path = os.getcwd()
-    print("My current directory is : " + directory_path)
-    folder_name = os.path.basename(directory_path)
-    print("My directory name is : " + folder_name)
-    csvPath = directory_path + "/csv_files"
-    print(csvPath)
 
 main()
