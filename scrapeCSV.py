@@ -4,6 +4,22 @@ import os
 from player import Player
 from season import Season
 
+class playerDatabase:
+
+    def __init__(self, playerDatabase):
+        self.playerDatabase = playerDatabase
+        self.numPlayers = 0
+
+    def getDatabase(self):
+        return self.playerDatabase
+
+    def addPlayer(self, player):
+        self.playerDatabase = insertNewPlayer(self, player)
+        self.numPlayers = self.numPlayers + 1
+
+    def getNumPlayers(self):
+        return self.numPlayers
+
 def getFiles():
     directory_path = os.getcwd()
     csvPath = directory_path + "/csv_files"
@@ -14,8 +30,8 @@ def getFiles():
             csv_files.append(f)
     return csv_files
 
-def printPlayers(players):
-    for player in players:
+def printPlayers(playerDB):
+    for player in playerDB.getDatabase():
         print(player.getName())
 
 def searchPlayer(L, target):
@@ -89,6 +105,7 @@ def createPlayers():
                 index = searchPlayer(players, newPlayer.getName())
 
                 if(index == -1):
+
                     # Add new player to sorted list
                     players = insertNewPlayer(players, newPlayer)
 
@@ -98,12 +115,3 @@ def createPlayers():
 
 
     return players
-
-def main():
-
-    players = createPlayers()
-
-    printPlayers(players)
-
-
-main()
