@@ -9,8 +9,6 @@
  
  Code Scraper of Source Material - COMPLETE
  
- Construct equation for player efficiency - Working On
- 
- Convert to Algorithm - 
+ Player Efficiency based on Dynammic Programming - In Progress
 
-Live Drafting Functionality - 
+ Live Drafting Functionality - 
