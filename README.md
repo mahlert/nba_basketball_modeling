@@ -1,9 +1,7 @@
 # Fantasy Basketball Team Builder
- Dynamic Programming problem to create an efficient statistical fantasy basketball team
- 
+Create an efficient statistical fantasy basketball team
  
  Progress Tracker:
- 
  
  Find Player Data Source Material - COMPLETE
  
