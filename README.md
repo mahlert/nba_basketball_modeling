@@ -6,7 +6,5 @@ Create an efficient statistical fantasy basketball team
  Find Player Data Source Material - COMPLETE
  
  Code Scraper of Source Material - COMPLETE
- 
- Player Efficiency based on Dynammic Programming - In Progress
 
- Live Drafting Functionality - 
+Project has been moved to a Kaggle dataset with code: https://www.kaggle.com/datasets/thomasjohnmahler/nba-player-season-stats
